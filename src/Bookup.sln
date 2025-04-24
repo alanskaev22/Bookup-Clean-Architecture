@@ -1,0 +1,33 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{E4D4258F-37BB-4C26-B9E9-5C1DF88D7A89}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{D9EE2479-C8D3-47C8-B3FF-1119769E4126}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Presentation\Api\Api.csproj", "{6B2CC7E7-9AC9-4122-927E-23CAD48F677D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B2CC7E7-9AC9-4122-927E-23CAD48F677D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B2CC7E7-9AC9-4122-927E-23CAD48F677D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B2CC7E7-9AC9-4122-927E-23CAD48F677D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B2CC7E7-9AC9-4122-927E-23CAD48F677D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6B2CC7E7-9AC9-4122-927E-23CAD48F677D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5D2EBC7E-F926-4069-AF0E-EA6A22FF0E7A}
+	EndGlobalSection
+EndGlobal
