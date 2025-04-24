@@ -1,0 +1,10 @@
+﻿<Project>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageVersion Include="Scalar.AspNetCore" Version="2.2.1" />
+		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.8.0.113526" />
+	</ItemGroup>
+</Project>

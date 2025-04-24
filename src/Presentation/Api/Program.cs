@@ -3,9 +3,11 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
-
-app.MapScalarApiReference();
+if (app.Environment.IsDevelopment())
+{
+    app.MapScalarApiReference();
+}
 
 app.MapGet("/", () => "Hello World!");
 
-app.Run();
+await app.RunAsync();
