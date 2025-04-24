@@ -4,4 +4,10 @@
     <PackageReference Include="Scalar.AspNetCore" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\BusinessManagement\BusinessManagement\BusinessManagement.csproj" />
+    <ProjectReference Include="..\..\Modules\ProductsCatalog\ProductsCatalog\ProductsCatalog.csproj" />
+    <ProjectReference Include="..\..\ServicesCatalog\ServicesCatalog\ServicesCatalog.csproj" />
+  </ItemGroup>
+
 </Project>
