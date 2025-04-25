@@ -33,7 +33,7 @@ jobs:
       run: dotnet build "${{ env.SOLUTION_PATH }}" --configuration ${{ env.CONFIGURATION }} --no-restore
 
     - name: Test
-      run: dotnet test "${{ env.SOLUTION_PATH }}" --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --verbosity-normal
+      run: dotnet test "${{ env.SOLUTION_PATH }}" --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --verbosity normal
 
     - name: Publish
       run: dotnet publish "${{ env.API_PROJECT_PATH }}" --configuration ${{ env.CONFIGURATION }} --no-restore --no-build  --property:PublishDir=${{ env.PUBLISH_DIR }} 
