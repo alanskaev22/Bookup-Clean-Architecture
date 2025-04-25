@@ -1,10 +1,13 @@
-﻿namespace BusinessManagement;
+﻿using Shared.RequestValidation;
 
-public static class DependencyInjection
+namespace BusinessManagement;
+
+public static class BusinessManagementModule
 {
     public static IServiceCollection AddBusinessManagementModule(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<BusinessManagementOptions>(configuration.GetSection(BusinessManagementOptions.BusinessManagement));
+        services.AddRequestsValidations(typeof(BusinessManagementModule).Assembly);
 
         return services;
     }

@@ -1,10 +1,13 @@
-﻿namespace ProductsCatalog;
+﻿using Shared.RequestValidation;
 
-public static class DependencyInjection
+namespace ProductsCatalog;
+
+public static class ProductsCatalogModule
 {
     public static IServiceCollection AddProductsCatalogModule(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<ProductsCatalogOptions>(configuration.GetSection(ProductsCatalogOptions.ProductsCatalog));
+        services.AddRequestsValidations(typeof(ProductsCatalogModule).Assembly);
 
         return services;
     }
