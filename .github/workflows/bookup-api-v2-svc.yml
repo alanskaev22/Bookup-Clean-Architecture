@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - develop
+    - main
 
 env:
   AZURE_WEBAPP_NAME: bookup-api-v2-svc
