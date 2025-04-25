@@ -7,15 +7,19 @@ public sealed class Price : ValueObject
 
     private Price(decimal value, Currency currency)
     {
+        Value = value;
+        Currency = currency;
+    }
+
+    public static Price Create(decimal value, Currency currency)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
         if (value < 0)
         {
             throw new ArgumentException("Price value cannot be negative.");
         }
-        Value = value;
-        Currency = currency ?? throw new ArgumentNullException(nameof(currency));
+        return new(value, currency);
     }
-
-    public static Price Create(decimal value, Currency currency) => new(value, currency);
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

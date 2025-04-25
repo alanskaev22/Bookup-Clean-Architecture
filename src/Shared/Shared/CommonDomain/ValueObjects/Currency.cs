@@ -4,24 +4,16 @@ public sealed class Currency : ValueObject
 {
     public string Code { get; private set; }
 
-    private Currency(string code)
-    {
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            throw new ArgumentException("Currency code cannot be empty.");
-        }
+    private Currency(string code) => Code = code;
 
+    public static Currency Create(string code)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(code);
+        ArgumentOutOfRangeException.ThrowIfNotEqual(code.Length, 3);
         code = code.Trim().ToUpperInvariant();
 
-        if (code.Length != 3)
-        {
-            throw new ArgumentException("Currency code must be exactly 3 characters.");
-        }
-
-        Code = code;
+        return new(code);
     }
-
-    public static Currency Create(string code) => new(code);
 
     public string Symbol => Code switch
     {
