@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace ProductsCatalog;
+﻿namespace ProductsCatalog;
 
 public static class DependencyInjection
 {

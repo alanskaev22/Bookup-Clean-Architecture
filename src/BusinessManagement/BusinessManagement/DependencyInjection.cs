@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace BusinessManagement;
+﻿namespace BusinessManagement;
 
 public static class DependencyInjection
 {

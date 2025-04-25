@@ -1,15 +1,7 @@
-using BusinessManagement;
-using ProductsCatalog;
-using Scalar.AspNetCore;
-using ServicesCatalog;
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-builder.Services.AddEndpointsApiExplorer();
-
 builder.Services
+    .AddApi(builder.Configuration)
     .AddBusinessManagementModule(builder.Configuration)
     .AddProductsCatalogModule(builder.Configuration)
     .AddServicesCatalogModule(builder.Configuration);
@@ -17,24 +9,10 @@ builder.Services
 var app = builder.Build();
 
 app
+    .UseApi()
     .UseBusinessManagementModule()
     .UseProductsCatalogModule()
     .UseServicesCatalogModule();
-
-app.MapOpenApi();
-app.MapScalarApiReference();
-
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 await app.RunAsync();
 
