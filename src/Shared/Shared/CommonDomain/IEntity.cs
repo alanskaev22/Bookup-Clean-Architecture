@@ -1,4 +1,4 @@
-﻿namespace Shared.DDD;
+﻿namespace Shared.CommonDomain;
 
 public interface IEntity<TId> : IEntity
 {

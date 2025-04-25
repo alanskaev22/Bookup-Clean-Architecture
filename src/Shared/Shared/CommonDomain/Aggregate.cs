@@ -1,4 +1,4 @@
-﻿namespace Shared.DDD;
+﻿namespace Shared.CommonDomain;
 
 public class Aggregate<TId> : Entity<TId>, IAggregate<TId>
 {
