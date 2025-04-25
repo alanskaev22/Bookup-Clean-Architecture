@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core application to Web App bookup-api-v2-svc
+name: Build and deploy Bookup API V2 Service
 on:
   workflow_dispatch:
   push:
