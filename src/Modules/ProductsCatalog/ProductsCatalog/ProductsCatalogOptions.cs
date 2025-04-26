@@ -4,5 +4,10 @@ public class ProductsCatalogOptions
 {
     public const string ProductsCatalog = "ProductsCatalog";
 
-    public string? RandomOption { get; set; }
+    public ConnectionStrings ConnectionStrings { get; set; } = null!;
+}
+
+public class ConnectionStrings
+{
+    public string BookupDatabase { get; init; } = null!;
 }
