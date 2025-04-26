@@ -22,7 +22,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
     private static void ConfigureId(EntityTypeBuilder<Product> builder)
     {
-        builder.HasKey(p => p.Id);
+        builder.HasKey(p => new { p.TenantId, p.Id });
 
         builder.Property(p => p.Id)
             .ValueGeneratedNever();
