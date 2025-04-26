@@ -5,28 +5,30 @@ namespace ProductsCatalog.Products.Models;
 public class Product : Aggregate<ProductId>
 {
     private readonly List<MediaResource> _media = [];
+    private readonly List<Category> _categories = [];
 
     public string Name { get; private set; }
-    public List<Category> Categories { get; private set; }
     public string Description { get; private set; }
     public Price Price { get; private set; }
+    public IReadOnlyList<Category> Categories => _categories.AsReadOnly();
     public IReadOnlyCollection<MediaResource> Media => _media.AsReadOnly();
 
-    private Product(ProductId productId, string name, List<Category> categories, string description, Price price)
+    private Product(Guid tenantId, ProductId productId, string name, List<Category> categories, string description, Price price) : base(tenantId)
     {
         Id = productId;
         Name = name;
-        Categories = categories;
         Description = description;
         Price = price;
+        _categories.AddRange(categories);
     }
 
-    public static Product Create(ProductId productId, string name, List<Category> categories, string description, Price price)
+    public static Product Create(Guid tenantId, ProductId productId, string name, List<Category> categories, string description, Price price)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
+        ArgumentOutOfRangeException.ThrowIfEqual(categories.Count, 0);
 
-        var product = new Product(productId, name, categories, description, price);
+        var product = new Product(tenantId, productId, name, categories, description, price);
 
         product.AddDomainEvent(new ProductCreatedDomainEvent(product));
 
@@ -37,11 +39,14 @@ public class Product : Aggregate<ProductId>
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
+        ArgumentOutOfRangeException.ThrowIfEqual(categories.Count, 0);
 
         Name = name;
-        Categories = categories;
         Description = description;
         Price = price;
+
+        _categories.Clear();
+        _categories.AddRange(categories);
 
         // If price has changed, add a domain event
         if (Price != price)
@@ -51,9 +56,9 @@ public class Product : Aggregate<ProductId>
         }
     }
 
-    public void AddMedia(Url url, MediaResourceType type, int order = 0, string? altText = null, string? mimeType = null)
+    public void AddMedia(Guid tenantId, Url url, MediaResourceType type, int order = 0, string? altText = null, string? mimeType = null)
     {
-        var media = MediaResource.Create(url, type, order, altText, mimeType);
+        var media = MediaResource.Create(tenantId, url, type, order, altText, mimeType);
 
         _media.Add(media);
     }

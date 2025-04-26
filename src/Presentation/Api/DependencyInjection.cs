@@ -6,11 +6,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<ApiOptions>(configuration.GetSection(ApiOptions.Api));
         services.AddControllers();
         services.AddOpenApi();
         services.AddEndpointsApiExplorer();
-
-        services.Configure<ApiOptions>(configuration.GetSection(ApiOptions.Api));
+        services.AddSingleton(TimeProvider.System);
 
         return services;
     }

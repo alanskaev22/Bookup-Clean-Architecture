@@ -2,28 +2,37 @@
 
 public sealed class Price : ValueObject
 {
-    public decimal Value { get; private set; }
-    public Currency Currency { get; private set; }
+    public decimal Amount { get; private set; }
+    public string Currency { get; private set; }
 
-    private Price(decimal value, Currency currency)
+    public string Symbol => Currency switch
     {
-        Value = value;
+        "USD" => "$",
+        "EUR" => "€",
+        "GBP" => "£",
+        _ => throw new NotSupportedException($"Symbol for currency code '{Currency}' is not supported.")
+    };
+
+    private Price(decimal amount, string currency)
+    {
+        Amount = amount;
         Currency = currency;
     }
 
-    public static Price Create(decimal value, Currency currency)
+    public static Price Create(decimal amount, string currency)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
-        if (value < 0)
-        {
-            throw new ArgumentException("Price value cannot be negative.");
-        }
-        return new(value, currency);
+        ArgumentOutOfRangeException.ThrowIfLessThan(amount, 0);
+        ArgumentException.ThrowIfNullOrWhiteSpace(currency);
+        ArgumentOutOfRangeException.ThrowIfNotEqual(currency.Length, 3);
+
+        currency = currency.Trim().ToUpperInvariant();
+
+        return new(amount, currency);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Value;
+        yield return Amount;
         yield return Currency;
     }
 }

@@ -9,6 +9,6 @@ public interface IEntity
 {
     DateTime? CreatedAt { get; set; }
     string? CreatedBy { get; set; }
-    DateTime? LastModified { get; set; }
+    DateTime? LastModifiedAt { get; set; }
     string? LastModifiedby { get; set; }
 }
