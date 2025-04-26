@@ -36,10 +36,10 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 .HasMaxLength(500);
 
     private static void ConfigurePrice(EntityTypeBuilder<Product> builder) =>
-        builder.OwnsOne(p => p.Price, priceBuilder =>
+        builder.OwnsOne(p => p.SellingPrice, priceBuilder =>
         {
             priceBuilder.Property(p => p.Amount)
-                .HasColumnName("PriceAmount")
+                .HasColumnName("SellingPrice")
                 .IsRequired();
 
             priceBuilder.Property(p => p.Currency)

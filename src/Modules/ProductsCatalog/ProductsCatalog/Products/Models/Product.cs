@@ -9,33 +9,33 @@ public class Product : Aggregate<ProductId>
 
     public string Name { get; private set; }
     public string Description { get; private set; }
-    public Price Price { get; private set; }
+    public Price SellingPrice { get; private set; }
     public IReadOnlyList<Category> Categories => _categories.AsReadOnly();
     public IReadOnlyCollection<MediaResource> Media => _media.AsReadOnly();
 
-    private Product(Guid tenantId, ProductId productId, string name, List<Category> categories, string description, Price price) : base(tenantId)
+    private Product(Guid tenantId, ProductId productId, string name, List<Category> categories, string description, Price sellingPrice) : base(tenantId)
     {
         Id = productId;
         Name = name;
         Description = description;
-        Price = price;
+        SellingPrice = sellingPrice;
         _categories.AddRange(categories);
     }
 
-    public static Product Create(Guid tenantId, ProductId productId, string name, List<Category> categories, string description, Price price)
+    public static Product Create(Guid tenantId, ProductId productId, string name, List<Category> categories, string description, Price sellingPrice)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
         ArgumentOutOfRangeException.ThrowIfEqual(categories.Count, 0);
 
-        var product = new Product(tenantId, productId, name, categories, description, price);
+        var product = new Product(tenantId, productId, name, categories, description, sellingPrice);
 
         product.AddDomainEvent(new ProductCreatedDomainEvent(product));
 
         return product;
     }
 
-    public void Update(string name, List<Category> categories, string description, Price price)
+    public void Update(string name, List<Category> categories, string description, Price sellingPrice)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
@@ -43,15 +43,15 @@ public class Product : Aggregate<ProductId>
 
         Name = name;
         Description = description;
-        Price = price;
+        SellingPrice = sellingPrice;
 
         _categories.Clear();
         _categories.AddRange(categories);
 
         // If price has changed, add a domain event
-        if (Price != price)
+        if (SellingPrice != sellingPrice)
         {
-            Price = price;
+            SellingPrice = sellingPrice;
             AddDomainEvent(new ProductPriceChangedDomainEvent(this));
         }
     }
