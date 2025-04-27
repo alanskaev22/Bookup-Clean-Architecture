@@ -3,6 +3,6 @@
 public interface IDomainEvent : INotification
 {
     Guid EventId => Guid.NewGuid();
-    DateTime OccurredOn => DateTime.Now;
+    DateTimeOffset OccurredOn => DateTimeOffset.Now;
     string EventType => GetType().AssemblyQualifiedName!;
 }

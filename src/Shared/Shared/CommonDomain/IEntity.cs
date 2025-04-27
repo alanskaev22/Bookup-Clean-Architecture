@@ -7,8 +7,8 @@ public interface IEntity<TId> : IEntity
 
 public interface IEntity
 {
-    DateTime? CreatedAt { get; set; }
+    DateTimeOffset? CreatedAt { get; set; }
     string? CreatedBy { get; set; }
-    DateTime? LastModifiedAt { get; set; }
+    DateTimeOffset? LastModifiedAt { get; set; }
     string? LastModifiedby { get; set; }
 }

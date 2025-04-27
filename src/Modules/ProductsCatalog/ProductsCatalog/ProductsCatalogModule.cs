@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductsCatalog.DataAccess;
 using ProductsCatalog.DataAccess.Seed;
+using Shared.DataAccess.Interceptors;
 
 namespace ProductsCatalog;
 
@@ -12,10 +13,11 @@ public static class ProductsCatalogModule
         services.AddRequestsValidations(typeof(ProductsCatalogModule).Assembly);
 
         // Data Access
-        services.AddDbContext<ProductsCatalogDbContext>(builder =>
+        services.AddDbContext<ProductsCatalogDbContext>((sp, options) =>
         {
-            builder.UseNpgsql(configuration.GetConnectionString("BookupDatabase"));
-            builder.EnableDetailedErrors();
+            options.AddInterceptors(new AuditableEntityInterceptor(sp.GetRequiredService<TimeProvider>()));
+            options.UseNpgsql(configuration.GetConnectionString(ProductsCatalogOptions.BookupDatabaseKeyName));
+            options.EnableDetailedErrors();
         });
         services.AddScoped<IDataSeeder, ProductsCatalogSeeder>();
 

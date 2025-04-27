@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shared.DataAccess.Seed;
 
 namespace Shared.DataAccess;
@@ -34,4 +35,10 @@ public static class Extensions
             await seeder.SeedAllAsync();
         }
     }
+
+    public static bool HasChangedOwnedEntities(this EntityEntry entry) =>
+        entry.References.Any(r =>
+        r.TargetEntry is not null &&
+        r.TargetEntry.Metadata.IsOwned() &&
+        (r.TargetEntry.State is EntityState.Added || r.TargetEntry.State is EntityState.Modified));
 }
