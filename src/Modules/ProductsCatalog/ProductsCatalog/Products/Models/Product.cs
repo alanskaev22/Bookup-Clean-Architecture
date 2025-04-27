@@ -7,46 +7,58 @@ public class Product : Aggregate<ProductId>
     private readonly List<MediaResource> _media = [];
     private readonly List<Category> _categories = [];
 
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public Price SellingPrice { get; private set; }
+    public string Name { get; private set; } = null!;
+    public string Brand { get; set; } = null!;
+    public string Description { get; private set; } = null!;
+    public Price SellingPrice { get; private set; } = null!;
     public IReadOnlyList<Category> Categories => _categories.AsReadOnly();
     public IReadOnlyCollection<MediaResource> Media => _media.AsReadOnly();
 
-    private Product(Guid tenantId, ProductId productId, string name, List<Category> categories, string description, Price sellingPrice) : base(tenantId)
-    {
-        Id = productId;
-        Name = name;
-        Description = description;
-        SellingPrice = sellingPrice;
-        _categories.AddRange(categories);
-    }
+    private Product()
+    { }
 
-    public static Product Create(Guid tenantId, ProductId productId, string name, List<Category> categories, string description, Price sellingPrice)
+    public static Product Create(Guid tenantId, ProductId productId, string name, string brand, string description, Price sellingPrice, List<Category> categories, List<MediaResource> mediaResource)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
+        ArgumentException.ThrowIfNullOrEmpty(brand);
         ArgumentException.ThrowIfNullOrEmpty(description);
         ArgumentOutOfRangeException.ThrowIfEqual(categories.Count, 0);
 
-        var product = new Product(tenantId, productId, name, categories, description, sellingPrice);
+        var product = new Product()
+        {
+            TenantId = tenantId,
+            Id = productId,
+            Name = name,
+            Brand = brand,
+            Description = description,
+            SellingPrice = sellingPrice,
+        };
+
+        product._categories.AddRange(categories);
+        product._media.AddRange(mediaResource);
 
         product.AddDomainEvent(new ProductCreatedDomainEvent(product));
 
         return product;
     }
 
-    public void Update(string name, List<Category> categories, string description, Price sellingPrice)
+    public void Update(string name, string brand, string description, Price sellingPrice, List<Category> categories, List<MediaResource> mediaResource)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
+        ArgumentException.ThrowIfNullOrEmpty(brand);
         ArgumentException.ThrowIfNullOrEmpty(description);
         ArgumentOutOfRangeException.ThrowIfEqual(categories.Count, 0);
 
         Name = name;
+        Brand = brand;
         Description = description;
         SellingPrice = sellingPrice;
 
         _categories.Clear();
         _categories.AddRange(categories);
+
+        _media.Clear();
+        _media.AddRange(mediaResource);
 
         // If price has changed, add a domain event
         if (SellingPrice != sellingPrice)

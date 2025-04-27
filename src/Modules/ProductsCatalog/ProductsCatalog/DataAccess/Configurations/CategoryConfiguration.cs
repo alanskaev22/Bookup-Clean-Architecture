@@ -3,11 +3,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ProductsCatalog.DataAccess.Configurations;
 
-public class ProductCategoryConfiguration : IEntityTypeConfiguration<Category>
+public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {
         ConfigureId(builder);
+
+        ConfigureProducts(builder);
 
         ConfigureName(builder);
     }
@@ -20,13 +22,15 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<Category>
             .ValueGeneratedNever();
     }
 
+    private static void ConfigureProducts(EntityTypeBuilder<Category> builder) => builder.Navigation(p => p.Products)
+               .UsePropertyAccessMode(PropertyAccessMode.Field);
+
     private static void ConfigureName(EntityTypeBuilder<Category> builder)
     {
         builder.Property(c => c.Name)
             .IsRequired()
             .HasMaxLength(150);
 
-        builder.HasIndex(c => c.Name)
-              .IsUnique();
+        builder.HasIndex(c => c.Name);
     }
 }

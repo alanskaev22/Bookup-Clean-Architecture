@@ -7,7 +7,7 @@ public class ProductsCatalogDbContext(DbContextOptions<ProductsCatalogDbContext>
 {
     public DbSet<Product> Products => Set<Product>();
     public DbSet<MediaResource> ProductMediaResources => Set<MediaResource>();
-    public DbSet<Category> ProductCategories => Set<Category>();
+    public DbSet<Category> Categories => Set<Category>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

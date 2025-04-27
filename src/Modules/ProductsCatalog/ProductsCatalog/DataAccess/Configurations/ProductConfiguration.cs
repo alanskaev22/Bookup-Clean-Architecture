@@ -11,6 +11,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         ConfigureName(builder);
 
+        ConfigureBrand(builder);
+
         ConfigureDescription(builder);
 
         ConfigurePrice(builder);
@@ -25,12 +27,23 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.HasKey(p => new { p.TenantId, p.Id });
 
         builder.Property(p => p.Id)
-            .ValueGeneratedNever();
+            .HasConversion(
+            id => id.Value,
+            value => ProductId.Create(value)
+            );
+
+        builder.Property(p => p.Id)
+                .ValueGeneratedNever()
+                .IsRequired();
     }
 
     private static void ConfigureName(EntityTypeBuilder<Product> builder) => builder.Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(150);
+
+    private static void ConfigureBrand(EntityTypeBuilder<Product> builder) => builder.Property(builder => builder.Brand)
+                .IsRequired()
+                .HasMaxLength(100);
 
     private static void ConfigureDescription(EntityTypeBuilder<Product> builder) => builder.Property(p => p.Description)
                 .HasMaxLength(500);
@@ -48,21 +61,14 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 .HasMaxLength(3);
         });
 
-    private static void ConfigureCategory(EntityTypeBuilder<Product> builder)
-    {
-        builder.HasMany(p => p.Categories)
-                       .WithMany(c => c.Products)
-                       .UsingEntity(j => j.ToTable("ProductCategories"));
-
-        builder.Navigation(p => p.Categories)
+    private static void ConfigureCategory(EntityTypeBuilder<Product> builder) => builder.Navigation(p => p.Categories)
                .UsePropertyAccessMode(PropertyAccessMode.Field);
-    }
 
     private static void ConfigureMediaResource(EntityTypeBuilder<Product> builder)
     {
         builder.HasMany<MediaResource>()
                        .WithOne()
-                       .HasForeignKey("ProductId")
+                       .HasForeignKey("Tenantid", "ProductId")
                        .OnDelete(DeleteBehavior.Cascade);
 
         builder.Navigation(p => p.Media)
