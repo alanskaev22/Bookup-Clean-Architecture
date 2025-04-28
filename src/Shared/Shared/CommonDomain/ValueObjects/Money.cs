@@ -8,23 +8,26 @@ public sealed class Money : ValueObject
 
     public bool IsZero => Amount == 0 && Currency == Currency.Empty;
 
-    public static Money Zero => Create(0, Currency.Empty);
+    public static Result<Money> Zero => Create(0, Currency.Empty);
 
     private Money()
     { }
 
-    public static Money Create(decimal amount, Currency currency)
+    public static Result<Money> Create(decimal amount, Currency currency)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(amount, 0);
+        if (amount < 0)
+        {
+            return Error.ForBadRequest("Amount cannot be negative");
+        }
 
-        return new()
+        return new Money()
         {
             Amount = ApplyBankersRounding(amount),
             Currency = currency
         };
     }
 
-    public Money Add(Money other)
+    public Result<Money> Add(Money other)
     {
         if (other.IsZero)
         {
@@ -35,7 +38,7 @@ public sealed class Money : ValueObject
             return Create(Amount + other.Amount, Currency);
         }
 
-        throw new InvalidOperationException($"Cannot add money with different currencies: {Currency} and {other.Currency}");
+        return Error.ForBadRequest($"Cannot add money with different currencies: {Currency} and {other.Currency}");
     }
 
     // TODO: Add Subtract/etc https://youtu.be/2izb2y819KU?si=i0UKChh4f4Yk88ID&t=91

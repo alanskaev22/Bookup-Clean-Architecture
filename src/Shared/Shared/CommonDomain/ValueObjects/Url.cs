@@ -6,18 +6,18 @@ public sealed class Url : ValueObject
 
     private Url(string value) => Value = value;
 
-    public static Url Create(string value)
+    public static Result<Url> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new ArgumentException("URL cannot be empty.");
+            return Error.ForBadRequest("URL cannot be empty.");
         }
         if (!Uri.IsWellFormedUriString(value, UriKind.Absolute))
         {
-            throw new ArgumentException("Invalid URL format.");
+            return Error.ForBadRequest("Invalid URL format.");
         }
 
-        return new(value);
+        return new Url(value);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

@@ -1,11 +1,18 @@
 ﻿namespace Shared.Functional;
 
-public record Error(string Code, string Description)
+public record Error
 {
     public static readonly Error None = new(string.Empty, string.Empty);
 
-    public string Code { get; init; } = Code;
-    public string Description { get; init; } = Description;
+    public string Code { get; init; }
+    public string Description { get; init; }
 
-    public override string ToString() => $"{Code}: {Description}";
+    private Error(string code, string description)
+    {
+        Code = code;
+        Description = description;
+    }
+
+    public static Error ForBadRequest(string code, string description) => new(code, description);
+    public static Error ForBadRequest(string description) => new(string.Empty, description);
 }

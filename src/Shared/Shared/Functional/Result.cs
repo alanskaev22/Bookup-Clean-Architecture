@@ -71,7 +71,7 @@ public class Result
     /// </summary>
     /// <param name="error">The error.</param>
     /// <returns>A new instance of <see cref="Result"/> with the specified error and failure flag set.</returns>
-    public static Result Failure(Error error) => new Result(false, error);
+    public static Result Failure(Error error) => new(false, error);
 
     /// <summary>
     /// Returns a failure <see cref="Result{TValue}"/> with the specified error.
@@ -83,7 +83,7 @@ public class Result
     /// We're purposefully ignoring the nullable assignment here because the API will never allow it to be accessed.
     /// The value is accessed through a method that will throw an exception if the result is a failure result.
     /// </remarks>
-    public static Result<TValue> Failure<TValue>(Error error) => new Result<TValue>(default!, false, error);
+    public static Result<TValue> Failure<TValue>(Error error) => new(default!, false, error);
 
     /// <summary>
     /// Returns the first failure from the specified <paramref name="results"/>.
@@ -126,6 +126,8 @@ public class Result<TValue> : Result
         => _value = value;
 
     public static implicit operator Result<TValue>(TValue value) => Success(value);
+
+    public static implicit operator Result<TValue>(Error error) => Failure<TValue>(error);
 
     /// <summary>
     /// Gets the result value if the result is successful, otherwise throws an exception.
