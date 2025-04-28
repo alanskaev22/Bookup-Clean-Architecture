@@ -1,6 +1,6 @@
 ﻿namespace Shared.Constants;
 
-public static class Currency
+public static class CurrencyConstants
 {
     public const string USD = "USD";
     public const string EUR = "EUR";

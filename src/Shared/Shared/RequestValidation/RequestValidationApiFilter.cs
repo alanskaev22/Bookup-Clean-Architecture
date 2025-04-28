@@ -4,10 +4,13 @@ internal sealed class RequestValidationApiFilter<TRequestToValidate> : IEndpoint
 {
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        var requestToValidate = context.Arguments.FirstOrDefault(argument => argument?.GetType() == typeof(TRequestToValidate)) as TRequestToValidate;
         var validator = context.HttpContext.RequestServices.GetService<IValidator<TRequestToValidate>>();
 
         if (validator is null)
+        {
+            return await next.Invoke(context);
+        }
+        if (context.Arguments.FirstOrDefault(argument => argument?.GetType() == typeof(TRequestToValidate)) is not TRequestToValidate requestToValidate)
         {
             return await next.Invoke(context);
         }

@@ -10,14 +10,14 @@ public class Product : Aggregate<ProductId>
     public string Name { get; private set; } = null!;
     public string Brand { get; set; } = null!;
     public string Description { get; private set; } = null!;
-    public Price SellingPrice { get; private set; } = null!;
+    public Money SellingPrice { get; private set; } = null!;
     public IReadOnlyList<Category> Categories => _categories.AsReadOnly();
     public IReadOnlyCollection<MediaResource> Media => _media.AsReadOnly();
 
     private Product()
     { }
 
-    public static Product Create(Guid tenantId, ProductId productId, string name, string brand, string description, Price sellingPrice, List<Category> categories, List<MediaResource> mediaResource)
+    public static Product Create(Guid tenantId, ProductId productId, string name, string brand, string description, Money sellingPrice, List<Category> categories, List<MediaResource> mediaResource)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(brand);
@@ -42,7 +42,7 @@ public class Product : Aggregate<ProductId>
         return product;
     }
 
-    public void Update(string name, string brand, string description, Price sellingPrice, List<Category> categories, List<MediaResource> mediaResource)
+    public void Update(string name, string brand, string description, Money sellingPrice, List<Category> categories, List<MediaResource> mediaResource)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(brand);

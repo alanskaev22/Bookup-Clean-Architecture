@@ -12,7 +12,7 @@ using ProductsCatalog.DataAccess;
 namespace ProductsCatalog.DataAccess.Migrations
 {
     [DbContext(typeof(ProductsCatalogDbContext))]
-    [Migration("20250427193643_InitialCreate")]
+    [Migration("20250428202311_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -190,7 +190,7 @@ namespace ProductsCatalog.DataAccess.Migrations
 
             modelBuilder.Entity("ProductsCatalog.Products.Models.Product", b =>
                 {
-                    b.OwnsOne("Shared.CommonDomain.ValueObjects.Price", "SellingPrice", b1 =>
+                    b.OwnsOne("Shared.CommonDomain.ValueObjects.Money", "SellingPrice", b1 =>
                         {
                             b1.Property<Guid>("ProductTenantId")
                                 .HasColumnType("uuid");
@@ -199,14 +199,8 @@ namespace ProductsCatalog.DataAccess.Migrations
                                 .HasColumnType("text");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("numeric")
+                                .HasColumnType("decimal(18,2)")
                                 .HasColumnName("SellingPrice");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasMaxLength(3)
-                                .HasColumnType("character varying(3)")
-                                .HasColumnName("Currency");
 
                             b1.HasKey("ProductTenantId", "ProductId");
 
@@ -214,6 +208,31 @@ namespace ProductsCatalog.DataAccess.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("ProductTenantId", "ProductId");
+
+                            b1.OwnsOne("Shared.CommonDomain.ValueObjects.Currency", "Currency", b2 =>
+                                {
+                                    b2.Property<Guid>("MoneyProductTenantId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<string>("MoneyProductId")
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Code")
+                                        .IsRequired()
+                                        .HasMaxLength(3)
+                                        .HasColumnType("character varying(3)")
+                                        .HasColumnName("CurrencyCode");
+
+                                    b2.HasKey("MoneyProductTenantId", "MoneyProductId");
+
+                                    b2.ToTable("Products", "ProductsCatalog");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("MoneyProductTenantId", "MoneyProductId");
+                                });
+
+                            b1.Navigation("Currency")
+                                .IsRequired();
                         });
 
                     b.Navigation("SellingPrice")

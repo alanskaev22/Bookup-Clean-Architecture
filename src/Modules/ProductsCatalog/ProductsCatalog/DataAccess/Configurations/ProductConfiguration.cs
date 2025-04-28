@@ -53,12 +53,16 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         {
             priceBuilder.Property(p => p.Amount)
                 .HasColumnName("SellingPrice")
+                .HasColumnType("decimal(18,2)")
                 .IsRequired();
 
-            priceBuilder.Property(p => p.Currency)
-                .HasColumnName("Currency")
+            priceBuilder.OwnsOne(s => s.Currency, currencyBuilder =>
+            {
+                currencyBuilder.Property(c => c.Code)
+                .HasColumnName("CurrencyCode")
                 .IsRequired()
                 .HasMaxLength(3);
+            });
         });
 
     private static void ConfigureCategory(EntityTypeBuilder<Product> builder) => builder.Navigation(p => p.Categories)
