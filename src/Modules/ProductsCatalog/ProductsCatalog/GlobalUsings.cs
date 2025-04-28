@@ -9,4 +9,5 @@ global using Shared.CommonDomain.Enumerations;
 global using Shared.CommonDomain.ValueObjects;
 global using Shared.DataAccess;
 global using Shared.DataAccess.Seed;
+global using Shared.Functional;
 global using Shared.RequestValidation;

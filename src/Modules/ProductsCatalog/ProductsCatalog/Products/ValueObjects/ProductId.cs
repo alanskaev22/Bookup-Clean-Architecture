@@ -2,18 +2,23 @@
 
 public sealed class ProductId : ValueObject
 {
-    public string Value { get; private set; }
+    public string Value { get; private set; } = default!;
 
-    private ProductId(string value)
+    private ProductId()
+    { }
+
+    public static Result<ProductId> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new ArgumentException("ProductId cannot be empty.");
+            return Error.ForBadRequest("ProductId cannot be empty.");
         }
-        Value = value;
-    }
 
-    public static ProductId Create(string value) => new(value);
+        return new ProductId()
+        {
+            Value = value
+        };
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

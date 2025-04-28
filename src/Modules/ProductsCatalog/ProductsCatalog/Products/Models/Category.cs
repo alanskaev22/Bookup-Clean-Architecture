@@ -14,11 +14,14 @@ public sealed class Category : Entity<Guid>
     private Category()
     { }
 
-    public static Category Create(Guid tenantId, string name)
+    public static Result<Category> Create(Guid tenantId, string name)
     {
-        ArgumentException.ThrowIfNullOrEmpty(name);
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return Error.ForBadRequest("Category name cannot be empty.");
+        }
 
-        return new()
+        return new Category()
         {
             TenantId = tenantId,
             Id = Guid.NewGuid(),
