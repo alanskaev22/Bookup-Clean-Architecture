@@ -1,0 +1,64 @@
+name: Build and deploy Bookup API V2 Service
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+
+env:
+  AZURE_WEBAPP_NAME: bookup-api-v2-svc
+  AZURE_WEBAPP_PACKAGE_PATH: "src/Presentation/Api/publish"
+  CONFIGURATION: "Release"
+  DOTNET_CORE_VERSION: "9.x"
+  SOLUTION_PATH: "src/Bookup.sln"
+  API_PROJECT_PATH: "src/Presentation/Api/Api.csproj"
+  PUBLISH_DIR: "src/Presentation/Api/publish"
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+  
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+
+    - name: Restore
+      run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+    - name: Build
+      run: dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ env.CONFIGURATION }} --no-restore
+
+    - name: Test
+      run: dotnet test ${{ env.SOLUTION_PATH }} --configuration ${{ env.CONFIGURATION }} --no-restore --no-build --verbosity normal
+
+    - name: Publish
+      run: dotnet publish ${{ env.API_PROJECT_PATH }} --configuration ${{ env.CONFIGURATION }} --no-restore --no-build  -o ${{ env.PUBLISH_DIR }} 
+
+    - name: Publish Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: webapp
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+  deploy:
+    name: Deploy to Azure
+    runs-on: windows-latest
+    needs: [build-and-test]
+
+    steps:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v4
+      with:
+        name: webapp
+        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+    - name: Deploy to Azure WebApp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

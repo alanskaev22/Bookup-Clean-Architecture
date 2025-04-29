@@ -1,0 +1,13 @@
+﻿global using Microsoft.AspNetCore.Builder;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using ProductsCatalog.Products.Models;
+global using ProductsCatalog.Products.ValueObjects;
+global using Shared.CommonDomain;
+global using Shared.CommonDomain.Entities;
+global using Shared.CommonDomain.Enumerations;
+global using Shared.CommonDomain.ValueObjects;
+global using Shared.DataAccess;
+global using Shared.DataAccess.Seed;
+global using Shared.Functional;
+global using Shared.RequestValidation;

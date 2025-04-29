@@ -1,11 +1,25 @@
-using Scalar.AspNetCore;
-
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services
+    .AddApi(builder.Configuration)
+    .AddBusinessManagementModule(builder.Configuration)
+    .AddProductsCatalogModule(builder.Configuration)
+    .AddServicesCatalogModule(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapScalarApiReference();
+app
+    .UseApi()
+    .UseBusinessManagementModule()
+    .UseProductsCatalogModule()
+    .UseServicesCatalogModule();
 
-app.MapGet("/", () => "Hello World!");
+await app.RunAsync();
 
-app.Run();
+#region Needed for integration tests web application factory
+
+public partial class Program
+{
+}
+
+#endregion Needed for integration tests web application factory
