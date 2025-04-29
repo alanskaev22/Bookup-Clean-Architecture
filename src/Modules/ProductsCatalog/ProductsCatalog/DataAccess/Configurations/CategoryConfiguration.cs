@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProductsCatalog.Products.Domain;
 
 namespace ProductsCatalog.DataAccess.Configurations;
 

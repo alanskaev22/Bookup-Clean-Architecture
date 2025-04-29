@@ -1,6 +1,6 @@
 ﻿using ProductsCatalog.Products.Events.Domain;
 
-namespace ProductsCatalog.Products.Models;
+namespace ProductsCatalog.Products.Domain;
 
 public class Product : Aggregate<ProductId>
 {
@@ -62,7 +62,6 @@ public class Product : Aggregate<ProductId>
         _media.Clear();
         _media.AddRange(mediaResource);
 
-        // If price has changed, add a domain event
         if (SellingPrice != sellingPrice)
         {
             SellingPrice = sellingPrice;
@@ -75,8 +74,12 @@ public class Product : Aggregate<ProductId>
     public Result AddMedia(Guid tenantId, Url url, MediaResourceType type, int order = 0, string? altText = null, string? mimeType = null)
     {
         var media = MediaResource.Create(tenantId, url, type, order, altText, mimeType);
+        if (media.IsFailure)
+        {
+            return media.Error;
+        }
 
-        _media.Add(media);
+        _media.Add(media.Value);
 
         return Result.Success();
     }

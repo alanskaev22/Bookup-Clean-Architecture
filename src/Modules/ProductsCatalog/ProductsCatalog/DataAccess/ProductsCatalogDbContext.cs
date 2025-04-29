@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using ProductsCatalog.Products.Domain;
 
 namespace ProductsCatalog.DataAccess;
 

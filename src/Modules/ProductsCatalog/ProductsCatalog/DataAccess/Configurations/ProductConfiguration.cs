@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProductsCatalog.Products.Domain;
 
 namespace ProductsCatalog.DataAccess.Configurations;
 
@@ -29,7 +30,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Id)
             .HasConversion(
             id => id.Value,
-            value => ProductId.Create(value)
+            value => ProductId.Create(value).Value
             );
 
         builder.Property(p => p.Id)

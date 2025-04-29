@@ -1,3 +1,5 @@
-﻿namespace ProductsCatalog.Products.Events.Domain;
+﻿using ProductsCatalog.Products.Domain;
+
+namespace ProductsCatalog.Products.Events.Domain;
 
 public sealed record ProductCreatedDomainEvent(Product Product) : IDomainEvent;

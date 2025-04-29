@@ -13,7 +13,7 @@ public class MediaResource : Entity<Guid>
     private MediaResource()
     { }
 
-    public static MediaResource Create(Guid tenantId, Url url, MediaResourceType type, int order = 0, string? altText = null, string? mimeType = null)
+    public static Result<MediaResource> Create(Guid tenantId, Url url, MediaResourceType type, int order = 0, string? altText = null, string? mimeType = null)
     {
         var media = new MediaResource()
         {

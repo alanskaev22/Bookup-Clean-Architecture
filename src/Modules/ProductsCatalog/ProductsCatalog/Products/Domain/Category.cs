@@ -1,4 +1,4 @@
-﻿namespace ProductsCatalog.Products.Models;
+﻿namespace ProductsCatalog.Products.Domain;
 
 public sealed class Category : Entity<Guid>
 {

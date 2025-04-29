@@ -1,6 +1,59 @@
 ﻿namespace Shared.Functional;
 
 /// <summary>
+/// Represents the result of some operation, with status information and possibly a value and an error.
+/// </summary>
+/// <typeparam name="TValue">The result value type.</typeparam>
+public class Result<TValue> : Result
+{
+    private readonly TValue _value;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Result{TValueType}"/> class with the specified parameters.
+    /// </summary>
+    /// <param name="value">The result value.</param>
+    /// <param name="isSuccess">The flag indicating if the result is successful.</param>
+    /// <param name="error">The error.</param>
+    protected internal Result(TValue value, bool isSuccess, Error error)
+        : base(isSuccess, error)
+        => _value = value;
+
+    public static implicit operator Result<TValue>(TValue value) => Success(value);
+
+    public static implicit operator Result<TValue>(Error error) => Failure<TValue>(error);
+
+    /// <summary>
+    /// Gets the result value if the result is successful, otherwise throws an exception.
+    /// </summary>
+    /// <returns>The result value if the result is successful.</returns>
+    /// <exception cref="InvalidOperationException"> when <see cref="Result.IsFailure"/> is true.</exception>
+    public TValue Value => IsSuccess
+        ? _value
+        : throw new InvalidOperationException("The value of a failure result can not be accessed.");
+
+    /// <summary>
+    /// Returns the first failure from the specified <paramref name="results"/>.
+    /// If there is no failure, a success is returned.
+    /// </summary>
+    /// <param name="results">The results array.</param>
+    /// <returns>
+    /// The first failure from the specified <paramref name="results"/> array,or a success it does not exist.
+    /// </returns>
+    public static Result FirstFailureOrSuccess(params Result<TValue>[] results)
+    {
+        foreach (var result in results)
+        {
+            if (result.IsFailure)
+            {
+                return result;
+            }
+        }
+
+        return Success();
+    }
+}
+
+/// <summary>
 /// Represents a result of some operation, with status information and possibly an error.
 /// </summary>
 public class Result
@@ -107,36 +160,4 @@ public class Result
     }
 
     public static implicit operator Result(Error error) => Failure(error);
-}
-
-/// <summary>
-/// Represents the result of some operation, with status information and possibly a value and an error.
-/// </summary>
-/// <typeparam name="TValue">The result value type.</typeparam>
-public class Result<TValue> : Result
-{
-    private readonly TValue _value;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Result{TValueType}"/> class with the specified parameters.
-    /// </summary>
-    /// <param name="value">The result value.</param>
-    /// <param name="isSuccess">The flag indicating if the result is successful.</param>
-    /// <param name="error">The error.</param>
-    protected internal Result(TValue value, bool isSuccess, Error error)
-        : base(isSuccess, error)
-        => _value = value;
-
-    public static implicit operator Result<TValue>(TValue value) => Success(value);
-
-    public static implicit operator Result<TValue>(Error error) => Failure<TValue>(error);
-
-    /// <summary>
-    /// Gets the result value if the result is successful, otherwise throws an exception.
-    /// </summary>
-    /// <returns>The result value if the result is successful.</returns>
-    /// <exception cref="InvalidOperationException"> when <see cref="Result.IsFailure"/> is true.</exception>
-    public TValue Value => IsSuccess
-        ? _value
-        : throw new InvalidOperationException("The value of a failure result can not be accessed.");
 }

@@ -2,6 +2,9 @@
 
 public class Currency : ValueObject
 {
+    /// <summary>
+    /// ISO 4217 Currency Code
+    /// </summary>
     public string Code { get; private set; } = default!;
 
     public Result<string> Symbol => Code switch
@@ -23,7 +26,7 @@ public class Currency : ValueObject
         }
         if (code.Length != 3)
         {
-            return Error.ForBadRequest("Currency code must be exactly 3 characters long.");
+            return Error.ForBadRequest("Currency code must be exactly 3 characters long and conform to ISO 4217 standards.");
         }
 
         return new Currency()
